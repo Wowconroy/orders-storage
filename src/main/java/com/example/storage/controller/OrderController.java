@@ -18,17 +18,11 @@ public class OrderController {
 
     @PostMapping("/create")
     public void createOrder(@RequestBody BuildingStorage buildingStorage) {
-        checker();
         buildingStorageService.makeOrder(buildingStorage);
     }
 
     @GetMapping("/getAll")
     public List<BuildingStorage> getAll (@RequestParam(value = "item") String item){
-        checker();
         return buildingStorageService.getAll(item);
-    }
-
-    public void checker() {
-        buildingStorageService.deleteOrders((System.currentTimeMillis() / 1000L) - 600L);
     }
 }
