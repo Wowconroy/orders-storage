@@ -20,13 +20,13 @@ public class BuildingStorageService {
     }
 
     public void makeOrder(BuildingStorage order){
-        buildingStorageRepository.deleteAfter((System.currentTimeMillis() / 1000L) - 600L);
+        extracted();
         order.setTimeStamp(System.currentTimeMillis() / 1000L);
         buildingStorageRepository.save(order);
     }
 
     public List<BuildingStorage> getAll(String item){
-        buildingStorageRepository.deleteAfter((System.currentTimeMillis() / 1000L) - 600L);
+        extracted();
         boolean hasOne = buildingStorageRepository.findAll()
                 .stream()
                 .map(x -> x.getItem().equals(item))
@@ -37,5 +37,9 @@ public class BuildingStorageService {
         }
 
         return buildingStorageRepository.findAll();
+    }
+
+    private void extracted() {
+        buildingStorageRepository.deleteAfter((System.currentTimeMillis() / 1000L) - 600L);
     }
 }
