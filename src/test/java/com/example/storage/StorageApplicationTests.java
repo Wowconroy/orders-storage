@@ -91,7 +91,7 @@ class StorageApplicationTests {
     }
 
     @Test
-    public void deleteMoreThanTenMinutes() throws NoSuchElementException {
+    public void deleteAfter() throws NoSuchElementException {
         long tenMin = System.currentTimeMillis();
         BuildingStorage order = new BuildingStorage();
         order.setTimeStamp(tenMin);
