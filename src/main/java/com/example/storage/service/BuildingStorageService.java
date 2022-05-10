@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,7 +25,16 @@ public class BuildingStorageService {
     }
 
     public List<BuildingStorage> getAll(String item){
-        return buildingStorageRepository.findAll(Sort.by("price"));
+        boolean hasOne = buildingStorageRepository.findAll()
+                .stream()
+                .map(x -> x.getItem().equals(item))
+                .anyMatch(i -> i.equals(true));
+
+        if (hasOne) {
+            return new ArrayList<>(buildingStorageRepository.findByItem(item, Sort.by("price")));
+        }
+
+        return buildingStorageRepository.findAll();
     }
 
     public void deleteOrders(long currentTime){
