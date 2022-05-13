@@ -21,8 +21,6 @@ public class BuildingStorage {
 
     private BigDecimal price;
 
-    private long timestamp;
-
     public BuildingStorage() {
     }
 
@@ -56,13 +54,5 @@ public class BuildingStorage {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    public long getTimeStamp() {
-        return timestamp;
-    }
-
-    public void setTimeStamp(long timeStamp) {
-        this.timestamp = timeStamp;
     }
 }

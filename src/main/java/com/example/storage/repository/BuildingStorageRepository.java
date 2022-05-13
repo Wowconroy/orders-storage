@@ -11,9 +11,11 @@ import java.util.List;
 
 public interface BuildingStorageRepository extends JpaRepository<BuildingStorage, Long>{
 
-    @Modifying(clearAutomatically = true, flushAutomatically = true)
-    @Query("DELETE FROM BuildingStorage b WHERE b.timestamp < :currentTime")
-    void deleteAfter(@Param("currentTime") long currentTime);
+//    @Modifying(clearAutomatically = true, flushAutomatically = true)
+//    @Query("DELETE FROM BuildingStorage b WHERE b.timestamp < :currentTime")
+//    void deleteAfter(@Param("currentTime") long currentTime);
 
     List<BuildingStorage> findByItem(String item, Sort sort);
+
+    BuildingStorage findByItem(String item);
 }
