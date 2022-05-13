@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -25,20 +28,16 @@ public class BuildingStorageService {
     }
 
     public List<BuildingStorage> getAll(String item){
-        boolean hasOne = buildingStorageRepository.findAll()
-                .stream()
-                .map(x -> x.getItem().equals(item))
-                .anyMatch(i -> i.equals(true));
+        List<BuildingStorage> collect = buildingStorageRepository.findAll().stream()
+                .filter(value -> value.getItem().equals(item))
+                .sorted(Comparator.comparing(BuildingStorage::getPrice)).collect(Collectors.toList());
 
-//        List<BuildingStorage> buildingStorages = new ArrayList<>();
-//
-//        buildingStorageRepository.findAll().stream()
-//                .filter(value -> value.equals(item)).findAny().
-
-        if (hasOne) {
-            return new ArrayList<>(buildingStorageRepository.findByItem(item, Sort.by("price")));
+        if (collect.size()<=0){
+            return buildingStorageRepository.findAll();
         }
-        return buildingStorageRepository.findAll();
+
+        return collect;
+//      return new ArrayList<>(buildingStorageRepository.findByItem(item, Sort.by("price")));
     }
 
     @Scheduled(fixedRateString = "${spring.intervalMs}")
