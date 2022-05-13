@@ -2,8 +2,8 @@ package com.example.storage.service;
 
 import com.example.storage.model.BuildingStorage;
 import com.example.storage.repository.BuildingStorageRepository;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Sort;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,8 +42,8 @@ public class BuildingStorageService {
         return buildingStorageRepository.findAll();
     }
 
-    @Scheduled(fixedRate = 100000L)
-    public void extracted() throws InterruptedException {
+    @Scheduled(fixedRateString = "${spring.intervalMs}")
+    public void extracted(){
         buildingStorageRepository.deleteAfter(System.currentTimeMillis()/1000L);
     }
 }
