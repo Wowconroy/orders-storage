@@ -90,23 +90,23 @@ class StorageApplicationTests {
         Assertions.assertEquals(200, status);
     }
 
-    @Test
-    public void deleteAfter() throws NoSuchElementException {
-        long tenMin = System.currentTimeMillis();
-        BuildingStorage order = new BuildingStorage();
-        order.setTimeStamp(tenMin);
-        buildingStorageService.makeOrder(order);
-        tenMin += 601;
-        long diff = tenMin - buildingStorageRepository.findById(1L).get().getTimeStamp();
-        if (diff > 600) {
-            buildingStorageRepository.delete(order);
-        }
-        try {
-            buildingStorageRepository.findById(1L).get();
-        } catch (NoSuchElementException ex) {
-            exception.expect(NoSuchElementException.class);
-        }
-    }
+//    @Test
+//    public void deleteAfter() throws NoSuchElementException {
+//        long tenMin = System.currentTimeMillis();
+//        BuildingStorage order = new BuildingStorage();
+//        order.setTimeStamp(tenMin);
+//        buildingStorageService.makeOrder(order);
+//        tenMin += 601;
+//        long diff = tenMin - buildingStorageRepository.findById(1L).get().getTimeStamp();
+//        if (diff > 600) {
+//            buildingStorageRepository.delete(order);
+//        }
+//        try {
+//            buildingStorageRepository.findById(1L).get();
+//        } catch (NoSuchElementException ex) {
+//            exception.expect(NoSuchElementException.class);
+//        }
+//    }
 
     private String mapToJson(Object obj) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();

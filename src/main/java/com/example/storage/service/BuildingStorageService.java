@@ -21,19 +21,28 @@ public class BuildingStorageService {
     }
 
     public void makeOrder(BuildingStorage order){
-//        order.setTimeStamp(System.currentTimeMillis() / 1000L);
         buildingStorageRepository.save(order);
     }
 
     public List<BuildingStorage> getAll(String item){
-        if (buildingStorageRepository.findByItem(item) != null) {
+        boolean hasOne = buildingStorageRepository.findAll()
+                .stream()
+                .map(x -> x.getItem().equals(item))
+                .anyMatch(i -> i.equals(true));
+
+//        List<BuildingStorage> buildingStorages = new ArrayList<>();
+//
+//        buildingStorageRepository.findAll().stream()
+//                .filter(value -> value.equals(item)).findAny().
+
+        if (hasOne) {
             return new ArrayList<>(buildingStorageRepository.findByItem(item, Sort.by("price")));
         }
         return buildingStorageRepository.findAll();
     }
 
     @Scheduled(fixedRateString = "${spring.intervalMs}")
-    public void extracted(){
+    public void deleteAfterTenMinutes(){
         buildingStorageRepository.deleteAll();
     }
 }
