@@ -3,6 +3,8 @@ package com.example.storage.service;
 import com.example.storage.model.BuildingStorage;
 import com.example.storage.repository.BuildingStorageRepository;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,18 +22,19 @@ public class BuildingStorageService {
     }
 
     public void makeOrder(BuildingStorage order){
-        extracted();
         order.setTimeStamp(System.currentTimeMillis() / 1000L);
         buildingStorageRepository.save(order);
     }
 
     public List<BuildingStorage> getAll(String item){
-        extracted();
         boolean hasOne = buildingStorageRepository.findAll()
                 .stream()
                 .map(x -> x.getItem().equals(item))
                 .anyMatch(i -> i.equals(true));
-
+//        buildingStorageRepository.findAll().stream().map(x -> x.getItem().equals(item))
+//                .findFirst().orElseGet(x -> buildingStorageRepository.findAll())
+////                .findByItem(item, Sort.by("price"))
+//
         if (hasOne) {
             return new ArrayList<>(buildingStorageRepository.findByItem(item, Sort.by("price")));
         }
@@ -39,7 +42,8 @@ public class BuildingStorageService {
         return buildingStorageRepository.findAll();
     }
 
-    private void extracted() {
-        buildingStorageRepository.deleteAfter((System.currentTimeMillis() / 1000L) - 600L);
+    @Scheduled(fixedRate = 100000L)
+    public void extracted() throws InterruptedException {
+        buildingStorageRepository.deleteAfter(System.currentTimeMillis()/1000L);
     }
 }
