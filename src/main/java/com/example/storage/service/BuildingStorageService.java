@@ -23,25 +23,26 @@ public class BuildingStorageService {
         this.buildingStorageRepository = buildingStorageRepository;
     }
 
-    public void makeOrder(BuildingStorage order){
+    public void makeOrder(BuildingStorage order) {
         buildingStorageRepository.save(order);
     }
 
-    public List<BuildingStorage> getAll(String item){
-        List<BuildingStorage> collect = buildingStorageRepository.findAll().stream()
-                .filter(value -> value.getItem().equals(item))
-                .sorted(Comparator.comparing(BuildingStorage::getPrice)).collect(Collectors.toList());
+    public List<BuildingStorage> getAll(String item) {
+//        List<BuildingStorage> collect = buildingStorageRepository.findAll().stream()
+//                .filter(value -> value.getItem().equals(item))
+//                .sorted(Comparator.comparing(BuildingStorage::getPrice)).collect(Collectors.toList());
 
-        if (collect.size()<=0){
+        List<BuildingStorage> buildingStorages
+                = new ArrayList<>(buildingStorageRepository.findByItem(item, Sort.by("price")));
+        if (buildingStorages.size() <= 0) {
             return buildingStorageRepository.findAll();
         }
 
-        return collect;
-//      return new ArrayList<>(buildingStorageRepository.findByItem(item, Sort.by("price")));
+        return buildingStorages;
     }
 
     @Scheduled(fixedRateString = "${spring.intervalMs}")
-    public void deleteAfterTenMinutes(){
+    public void deleteAfterTenMinutes() {
         buildingStorageRepository.deleteAll();
     }
 }
